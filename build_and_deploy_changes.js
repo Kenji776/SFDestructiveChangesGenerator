@@ -1,4 +1,5 @@
 var ignoreDeployErrors = true;       //allows deployment to continue even if some items fail.
+var doDeployment = false; //should any kind of deployment be attempted or should we just generate the XML files? If this is false the checkONly mode flag has no effect.
 var checkOnlyMode = true; //will only validate that the deployment will succeed but not do it if true.
 var openDeployPageOnComplete = true; //open a web browser tab to the deployment status screen after each deploy.
 var usernames = ['someUser@org1.com','someUser@org2.com']; //list of usernames configured in this sfdx project that you want to build and deploy for.
@@ -63,40 +64,48 @@ function mainLoop(index)
 			}
 			else
 			{
-				log('Deploying changes...',true,'green');
-				
-				deployPackage(username, function(error, stdout, stderr){
-					deployResult = JSON.parse(stdout);
-					log(deployResult,false);
+				if(doDeployment)
+				{
+					log('Deploying changes...',true,'green');
 					
-					if(error || stderr || !deployResult.result.success)
-					{
-						log('----------------------- DEPLOYMENT ERROR! --------------------------',true,'red');
-						if(error) log(JSON.stringify(error, null, 2),true,'red');
-						if(stderr) log(JSON.stringify(stderr, null, 2),true,'red');
-						log(JSON.stringify(deployResult.result, null, 2));
-					}
-					else
-					{
-						log('DEPLOYMENT SUCCESS!',true,'green');						
-					}
-					for(prop in deployResult.result)
-					{
-						if(deployResult.hasOwnProperty(prop))
+					deployPackage(username, function(error, stdout, stderr){
+						deployResult = JSON.parse(stdout);
+						log(deployResult,false);
+						
+						if(error || stderr || !deployResult.result.success)
 						{
-							log(prop + ': ' + deployResult[prop]);
-							log(deployResult.result,false);
+							log('----------------------- DEPLOYMENT ERROR! --------------------------',true,'red');
+							if(error) log(JSON.stringify(error, null, 2),true,'red');
+							if(stderr) log(JSON.stringify(stderr, null, 2),true,'red');
+							log(JSON.stringify(deployResult.result, null, 2));
 						}
-					}						
-					
-					if(openDeployPageOnComplete)
-					{
-						runCommand('start ' + resultsObject.result.instanceUrl+'/lightning/setup/DeployStatus/home');
-					}
-					
-					if(index<usernames.length-1) mainLoop(index+1)
-					else finish();
-				});
+						else
+						{
+							log('DEPLOYMENT SUCCESS!',true,'green');						
+						}
+						for(prop in deployResult.result)
+						{
+							if(deployResult.hasOwnProperty(prop))
+							{
+								log(prop + ': ' + deployResult[prop]);
+								log(deployResult.result,false);
+							}
+						}						
+						
+						if(openDeployPageOnComplete)
+						{
+							runCommand('start ' + resultsObject.result.instanceUrl+'/lightning/setup/DeployStatus/home');
+						}
+						
+						if(index<usernames.length-1) mainLoop(index+1)
+						else finish();
+					});
+				}	
+				else
+				{
+					log('Deployment disabled. Set doDeployment=true to perform validation/deployment');
+					finish();
+				}
 			}
 			
 		});
