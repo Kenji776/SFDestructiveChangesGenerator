@@ -6,7 +6,7 @@ buildpackage.apex you can automatically build and deploy your changes to an org.
 
 What's required?
 Node.Js must be installed on your local machine.
-This script must be running inside a folder configured as an sfdx project with visual studio code (it uses SFDX commands for deployment)
+You must have SFDX installed and the orgs you want to deploy to be authorized.
 
 How does it work?
 
