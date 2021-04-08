@@ -21,8 +21,10 @@ public static string buildPackage()
 	
     map<string,list<string>> packageContents = new map<string,list<string>>();
     
-    packageContents.put('ListView',  getListViews(buildViewsMap()));
+	//sample of deleting all list views for lead, account and opportunity except for those defined in the reservedListViews function
+    packageContents.put('ListView',  getListViews(reservedListViews()));
     
+	//Add more to your package contents here. The key is the MetaData name of the object, and the value is a list of elements of that type to delete.
     string packageBody = buildPackageString(packageContents);
 
     return packageBody;
@@ -32,7 +34,7 @@ public static string buildPackage()
 * @Description creates the map of list of objects and views to not delete
 * @return map of sObject names to list of views not to delete
 **/
-public static map<string,list<string>> buildViewsMap()
+public static map<string,list<string>> reservedListViews()
 {
 	return new Map<String,list<string>> {
 		'Lead'        => new list<string> { 'Open_Referrals_Im_Assigned','RecentlyViewedLeads' },
