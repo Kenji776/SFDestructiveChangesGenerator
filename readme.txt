@@ -22,6 +22,9 @@ XML. That is because the next step reads from that log.
 ignoreDeployErrors (boolean)      
 --allows deployment to continue even if some items fail.
 
+doDeploy (boolean)
+-- controls if any deployment (validate only or actual deploy) happens, or if the XML files are generated and thats it.
+
 checkOnlyMode (boolean)           
 --will only validate that the deployment will succeed but not do it if true.
 
