@@ -35,3 +35,5 @@ usernames (javascript array)
 --list of usernames configured in this sfdx project that you want to build and deploy for. Format is ['name1','name2','name3'];
 
 That's it now you are ready to run. If on windows you can simply click run the "build and deploy.bat" file. Otherwise simply use node to run "build_and_deploy_changes.js". For each username defined the program will run the apex script, which will generate a log that prints out the generated XML to executeResult.txt (by default). Then the build_and_deploy_changes.js file will extract that text and use it to create a destructiveChanges.xml file. For each org it will create a folder within the destructiveChanges folder and also create the empty package.xml file. It will then use the sfdx force:mdapi:deploy command to deploy the changes (using the ignoreDeployErrors and checkOnlyMode flags you set). It will print the results to the console and also create a log.txt file you can review. Thats it! 
+
+See more at https://iwritecrappycode.wordpress.com/2021/04/08/salesforce-destructive-changes-generator-deployer/
